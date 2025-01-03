@@ -10,6 +10,7 @@ const users = [
   { id: 4, name: 'User 4' },
   { id: 5, name: 'User 5' },
 ];
+console.log("elo")
 
 const Admin = () => {
   const [selectedTab, setSelectedTab] = useState(0);
