@@ -1,0 +1,54 @@
+/* Custom styles */
+.hero-section {
+  background: linear-gradient(135deg, #f3f3da 0%, #FFF 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  animation: float 6s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 50px;
+  height: 50px;
+  top: 20%;
+  left: 10%;
+}
+
+.shape-2 {
+  width: 30px;
+  height: 30px;
+  top: 60%;
+  right: 20%;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes priceUpdate {
+  0% { background-color: rgba(91, 77, 255, 0.1); }
+  100% { background-color: transparent; }
+}
+
+.price-update {
+  animation: priceUpdate 1s ease-out;
+}
+
