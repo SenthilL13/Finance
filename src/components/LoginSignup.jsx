@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -11,80 +11,77 @@ import {
   ThemeProvider,
   Snackbar,
   Alert,
-} from '@mui/material';
-import { styled } from '@mui/system';
-import { useNavigate } from 'react-router-dom'; 
-import fetchdata from'./api/fetchdata'
+} from "@mui/material";
+import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
+import fetchdata from "./api/fetchdata";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#6A5ACD', // SlateBlue
+      main: "#6A5ACD", // SlateBlue
     },
     secondary: {
-      main: '#FF4E50', // Coral-like color
+      main: "#FF4E50", // Coral-like color
     },
   },
 });
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%', // Vibrant gradient
-  borderRadius: '15px',
-  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-  backdropFilter: 'blur(4px)',
-  border: '1px solid rgba(255, 255, 255, 0.18)',
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%", // Vibrant gradient
+  borderRadius: "15px",
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+  backdropFilter: "blur(4px)",
+  border: "1px solid rgba(255, 255, 255, 0.18)",
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   marginBottom: theme.spacing(2),
-  '& .MuiOutlinedInput-root': {
-   
-    '&.Mui-focused fieldset': {
-      borderColor: '#000000',
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "#000000",
     },
-    
   },
-  
-  '& .MuiInputBase-input': {
-    color: '#000000',
+
+  "& .MuiInputBase-input": {
+    color: "#000000",
   },
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
   border: 0,
   borderRadius: 3,
-  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-  color: 'white',
+  boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+  color: "white",
   height: 48,
-  padding: '0 30px',
-  '&:hover': {
-    background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)',
+  padding: "0 30px",
+  "&:hover": {
+    background: "linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)",
   },
 }));
 
-const BackgroundContainer = styled('div')({
-  minHeight: '100vh',
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+const BackgroundContainer = styled("div")({
+  minHeight: "100vh",
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   background: `linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)`,
-
 });
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info'); // success, error, info, warning
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("info"); // success, error, info, warning
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const navigate = useNavigate();
@@ -100,90 +97,91 @@ const LoginSignup = () => {
   };
 
   const validateFields = () => {
-    if (!username) return 'User Name is required!';
-    if (!password) return 'Password is required!';
-    if (!isLogin && !email) return 'Email is required!';
+    if (!username) return "User Name is required!";
+    if (!password) return "Password is required!";
+    if (!isLogin && !email) return "Email is required!";
     return null;
   };
 
   const handleLogin = () => {
     const error = validateFields();
     if (error) {
-      showSnackbar(error, 'error');
+      showSnackbar(error, "error");
       return;
     }
 
     const payload = { username, password };
     fetchdata
       .ac_login(payload) // Replace with your actual login API method
-      .then(response => {
-        console.log('Response:', response);
+      .then((response) => {
+        console.log("Response:", response);
         if (response.rval === 1) {
-          localStorage.setItem('user_id',response.user_id)
-          showSnackbar(response.msg, 'success');
-          if(response.isadmin == 1)
-          {
-            navigate('/admin')
-          }
-          else{
-          navigate('/home');
+          localStorage.setItem("user_id", response.user_id);
+          showSnackbar(response.msg, "success");
+          if (response.isadmin == 1) {
+            navigate("/admin");
+          } else {
+            navigate("/home");
           } // Navigate to dashboard
         } else {
-          showSnackbar(response.msg || 'Invalid credentials!', 'error');
+          showSnackbar(response.msg || "Invalid credentials!", "error");
         }
       })
-      .catch(error => {
-        console.error('Error during API request:', error);
-        showSnackbar('Failed to login. Please try again.', 'error');
+      .catch((error) => {
+        console.error("Error during API request:", error);
+        showSnackbar("Failed to login. Please try again.", "error");
       });
   };
 
   const handleSignup = () => {
     const error = validateFields();
     if (error) {
-      showSnackbar(error, 'error');
+      showSnackbar(error, "error");
       return;
     }
 
-    const payload = { "username":username, "password":password, "email":email };
+    const payload = { username: username, password: password, email: email };
     fetchdata
       .ac_signup(payload) // Replace with your actual signup API method
-      .then(response => {
-        console.log('Response:', response);
+      .then((response) => {
+        console.log("Response:", response);
         if (response.rval === 1) {
-          showSnackbar(response.msg || 'Sign-up successful! Please login.', 'success');
+          showSnackbar(
+            response.msg || "Sign-up successful! Please login.",
+            "success"
+          );
           setIsLogin(true); // Switch to login mode
         } else {
-          showSnackbar(response.msg || 'Sign-up failed!', 'error');
+          showSnackbar(response.msg || "Sign-up failed!", "error");
         }
       })
-      .catch(error => {
-        console.error('Error during API request:', error);
-        showSnackbar('Failed to sign up. Please try again.', 'error');
+      .catch((error) => {
+        console.error("Error during API request:", error);
+        showSnackbar("Failed to sign up. Please try again.", "error");
       });
   };
 
   return (
-    <ThemeProvider theme={theme} >
-      <BackgroundContainer id='login'>
-        <Container component="main" maxWidth="xs" id='login' >
+    <ThemeProvider theme={theme}>
+      <BackgroundContainer id="login">
+        <Container component="main" maxWidth="xs" id="login">
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <StyledPaper elevation={6}>
               <Typography
                 component="h1"
                 variant="h4"
-                sx={{ mb: 3, color: '#000000', fontWeight: 'bold' }}
+                sx={{ mb: 3, color: "#000000", fontWeight: "bold" }}
               >
-                {isLogin ? 'Login' : 'Sign Up'}
+                {isLogin ? "Login" : "Sign Up"}
               </Typography>
-              <Box component="form" noValidate sx={{ mt: 1, width: '100%' }}>
+              <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
                 <StyledTextField
                   margin="normal"
                   required
@@ -195,7 +193,7 @@ const LoginSignup = () => {
                   autoFocus
                   variant="outlined"
                   value={username}
-                  onChange={e => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
                 <StyledTextField
                   margin="normal"
@@ -208,7 +206,7 @@ const LoginSignup = () => {
                   autoComplete="current-password"
                   variant="outlined"
                   value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 {!isLogin && (
                   <StyledTextField
@@ -221,7 +219,7 @@ const LoginSignup = () => {
                     id="email"
                     variant="outlined"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 )}
                 <StyledButton
@@ -230,22 +228,22 @@ const LoginSignup = () => {
                   variant="contained"
                   onClick={isLogin ? handleLogin : handleSignup}
                 >
-                  {isLogin ? 'Sign In' : 'Sign Up'}
+                  {isLogin ? "Sign In" : "Sign Up"}
                 </StyledButton>
                 <Grid container justifyContent="center">
                   <Grid item>
                     <Button
                       onClick={() => setIsLogin(!isLogin)}
-                      sx={{ mt: 2, color: '#000000' }}
+                      sx={{ mt: 2, color: "#000000" }}
                     >
                       {isLogin ? (
                         <>
-                          Don't have an account?{' '}
+                          Don't have an account?{" "}
                           <span
                             style={{
-                              color: '#912edf',
-                              fontSize: '1.2rem',
-                              marginLeft: '8px',
+                              color: "#912edf",
+                              fontSize: "1.2rem",
+                              marginLeft: "8px",
                             }}
                           >
                             Sign Up
@@ -253,12 +251,12 @@ const LoginSignup = () => {
                         </>
                       ) : (
                         <>
-                          Already have an account?{' '}
+                          Already have an account?{" "}
                           <span
                             style={{
-                              color: '#912edf',
-                              fontSize: '1.3rem',
-                              marginLeft: '8px',
+                              color: "#912edf",
+                              fontSize: "1.3rem",
+                              marginLeft: "8px",
                             }}
                           >
                             Login
@@ -281,7 +279,7 @@ const LoginSignup = () => {
         <Alert
           onClose={handleSnackbarClose}
           severity={snackbarSeverity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbarMessage}
         </Alert>
