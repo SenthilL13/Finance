@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Grid, Typography, Button, Box, useTheme } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Typography,
+  Button,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  useTheme,
+} from '@mui/material';
 import { styled } from '@mui/system';
 
 const HeroContainer = styled(Box)(({ theme }) => ({
@@ -55,10 +67,21 @@ const ChatBotInput = styled('input')(({ theme }) => ({
 
 function HeroSection() {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+  const [isNotepadOpen, setIsNotepadOpen] = useState(false);
+  const [notes, setNotes] = useState('');
   const theme = useTheme();
 
   const toggleChatBot = () => {
     setIsChatBotOpen(!isChatBotOpen);
+  };
+
+  const toggleNotepad = () => {
+    setIsNotepadOpen(!isNotepadOpen);
+  };
+
+  const handleSaveNotes = () => {
+    console.log('Saved Notes:', notes); // Replace with actual save logic
+    setIsNotepadOpen(false);
   };
 
   return (
@@ -93,21 +116,47 @@ function HeroSection() {
             <Typography variant="h6" paragraph>
               Start your journey to financial freedom today!
             </Typography>
-            <Button variant="contained" color="secondary" size="large" sx={{ mr: 2 }}>
-              Start your savings
+            <Button variant="contained" color="secondary" size="large" sx={{ mr: 2 }} onClick={toggleNotepad}>
+              Make Notes
             </Button>
-            {/* <Button variant="outlined" color="secondary" size="large" onClick={toggleChatBot}>
-              Chat us
-            </Button> */}
           </Grid>
           <Grid item xs={12} md={6}>
             <Box sx={{ position: 'relative' }}>
-              <img src="https://i.ibb.co/L68y6RR/pixelcut-export-1-1.png" alt="Investment Illustration" style={{ maxWidth: '100%', height: 'auto' }} />
+              <img
+                src="https://i.ibb.co/L68y6RR/pixelcut-export-1-1.png"
+                alt="Investment Illustration"
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
             </Box>
           </Grid>
         </Grid>
       </Container>
 
+      {/* Notepad Modal */}
+      <Dialog open={isNotepadOpen} onClose={toggleNotepad} maxWidth="sm" fullWidth>
+        <DialogTitle>Notes</DialogTitle>
+        <DialogContent >
+          <TextField
+            fullWidth
+            multiline
+            rows={10}
+            variant="outlined"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Write your notes here..."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleNotepad} color="secondary">
+            Close
+          </Button>
+          <Button onClick={handleSaveNotes} variant="contained" color="secondary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ChatBot */}
       <ChatBotContainer>
         {isChatBotOpen ? (
           <ChatBotBox>
@@ -142,4 +191,3 @@ function HeroSection() {
 }
 
 export default HeroSection;
-

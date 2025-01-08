@@ -1,28 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Tab, Tabs, Box, TextField, Button, IconButton, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import fetchdata from'./api/fetchdata'
 
 // User Management Data (simulated)
-const users = [
-  { id: 1, name: 'User 1' },
-  { id: 2, name: 'User 2' },
-  { id: 3, name: 'User 3' },
-  { id: 4, name: 'User 4' },
-  { id: 5, name: 'User 5' },
-];
-console.log("elo")
+
 
 const Admin = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [contentData, setContentData] = useState({ field1: '', field2: '', field3: '' });
+  const [users, setUsers] = useState([]);
+  
+
+  let user_id = localStorage.getItem('user_id')
+
+ useEffect(() => {
+   Get_Users()
+
+
+}, []);
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
+ const Get_Users = ()=>{
+  const payload = {user_id,action:""};
+    fetchdata
+      .ac_user_manage(payload) // Replace with your actual login API method
+      .then(response => {
+       setUsers(response.users)
+        
+      })
+      .catch(error => {
+        console.error('Error during API request:', error);
+      });
+    }
+
   const handleDeleteUser = (userId) => {
-    // Handle user deletion logic
-    console.log('Deleted user with ID:', userId);
+    console.log("delete",userId)
+    const payload = {user_id:userId,action:"delete"};
+    fetchdata
+      .ac_user_manage(payload) // Replace with your actual login API method
+      .then(response => {
+       setUsers(response.users) 
+       window.location.reload(); 
+      })
+      .catch(error => {
+        console.error('Error during API request:', error);
+      });
   };
 
   const handleSubmitContent = () => {
@@ -36,7 +62,7 @@ const Admin = () => {
   return (
     <Box
       sx={{
-         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '100vh',
@@ -65,8 +91,8 @@ const Admin = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background
                   }}
                 >
-                  <Typography variant="body1">{user.name}</Typography>
-                  <IconButton onClick={() => handleDeleteUser(user.id)} color="error">
+                  <Typography variant="body1">{user.username}</Typography>
+                  <IconButton onClick={() => handleDeleteUser(user.user_id)} color="error">
                     <DeleteIcon />
                   </IconButton>
                 </Paper>

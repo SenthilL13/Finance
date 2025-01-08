@@ -7,7 +7,9 @@ import {
   MenuItem, 
   Paper, 
   Container ,
-  Box
+  Box,
+  Alert,
+  Snackbar
 } from '@mui/material';
 
 function JoinUsForm() {
@@ -19,6 +21,8 @@ function JoinUsForm() {
     message: ''
   });
 
+  const [alertOpen, setAlertOpen] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -27,10 +31,45 @@ function JoinUsForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Here you would typically send the data to a server
+
+    // Example: Sending form data as an email (requires backend setup)
+    try {
+      await fetch('/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          to: 'example@mail.com',
+          subject: 'New Join Us Form Submission',
+          body: `
+            Name: ${formData.name}\n
+            City: ${formData.city}\n
+            State: ${formData.state}\n
+            Status: ${formData.status}\n
+            Message: ${formData.message}
+          `,
+        }),
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+
+    setAlertOpen(true);
+    setFormData({
+      name: '',
+      city: '',
+      state: '',
+      status: '',
+      message: ''
+    });
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
   };
 
   return (
@@ -105,10 +144,14 @@ function JoinUsForm() {
           </Grid>
         </form>
       </Paper>
+      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+          Form submitted successfully!
+        </Alert>
+      </Snackbar>
     </Container>
     </Box>
   );
 }
 
 export default JoinUsForm;
-

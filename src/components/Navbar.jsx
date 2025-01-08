@@ -1,7 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Container>
@@ -12,7 +14,7 @@ function Navbar() {
           <Button color="inherit" href="#home">Home</Button>
           <Button color="inherit" href="#hero-section">Our Services</Button>
           <Button color="inherit" href="#join">About Us</Button>
-          <Button color="inherit" href="#join">Logout</Button>
+          <Button color="inherit" onClick={()=>navigate('/')}>Logout</Button>
 
         </Toolbar>
       </Container>
