@@ -31,42 +31,27 @@ function JoinUsForm() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-
-    // Example: Sending form data as an email (requires backend setup)
-    try {
-      await fetch('/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          to: 'example@mail.com',
-          subject: 'New Join Us Form Submission',
-          body: `
-            Name: ${formData.name}\n
-            City: ${formData.city}\n
-            State: ${formData.state}\n
-            Status: ${formData.status}\n
-            Message: ${formData.message}
-          `,
-        }),
-      });
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-
-    setAlertOpen(true);
-    setFormData({
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const mailtoLink = `mailto:reachsharmi2020@mail.com?subject=New Join Us Form Submission&body=
+    Name: ${formData.name}%0D%0A
+    City: ${formData.city}%0D%0A
+    State: ${formData.state}%0D%0A
+    Status: ${formData.status}%0D%0A
+    Message: ${formData.message}`;
+  
+  window.location.href = mailtoLink;
+   setFormData({
       name: '',
       city: '',
       state: '',
       status: '',
       message: ''
     });
-  };
+};
+
+   
+  
 
   const handleAlertClose = () => {
     setAlertOpen(false);

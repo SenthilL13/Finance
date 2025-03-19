@@ -11,8 +11,7 @@ function SipSection() {
               SIP - <Typography component="span" color="secondary" variant="h3">Smartway to Invest in</Typography> Mutual Funds
             </Typography>
             <Typography variant="body1" paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </Typography>
+A Systematic Investment Plan (SIP) is a disciplined approach to investing in mutual funds. It allows investors to invest a fixed amount regularly, helping them benefit from rupee cost averaging and compounding over time.            </Typography>
             <Button variant="contained" color="secondary" size="large">
               GET MORE
             </Button>
