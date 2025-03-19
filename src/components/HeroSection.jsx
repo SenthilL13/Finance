@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef,useEffect ,useState } from 'react';
 import {
   Container,
   Grid,
@@ -37,7 +37,7 @@ const ChatBotContainer = styled(Box)(({ theme }) => ({
 }));
 
 const ChatBotBox = styled(Box)(({ theme }) => ({
-  width: '400px',  // Increased width
+  width: '600px',  // Increased width
   height: '500px', // Increased height
   border: '1px solid #ccc',
   borderRadius: '10px',
@@ -97,16 +97,26 @@ function HeroSection() {
   const [notes_text, setNotes] = useState('');
   const theme = useTheme();
   const userId = localStorage.getItem("user_id");
+ const [showChatbotMessage, setShowChatbotMessage] = useState(true);
+ const chatBodyRef = useRef(null);
 
-  const toggleChatBot = () => {
-    setIsChatBotOpen(!isChatBotOpen);
-    if (!isChatBotOpen) {
-      fetchChatbotData(0);
-    }
-  };
+ useEffect(() => {
+  if (chatBodyRef.current) {
+    chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+  }
+}, [chatHistory]);
+
+const toggleChatBot = () => {
+  setIsChatBotOpen(!isChatBotOpen);
+  setShowChatbotMessage(false); // Hide the message when chatbot opens
+  if (!isChatBotOpen) {
+    fetchChatbotData(0);
+  }
+};
+
 
    const handleSaveNotes = () => {
-   const payload = {"user_id" :userId,"note":notes_text,"action":"update" };
+   const payload = {"user_id":userId,"note":"","action":"" };
      fetchdata.ac_notes(payload)
     .then(response => {
       
@@ -253,12 +263,12 @@ const fetchChatbotFollowUp = (id) => {
             <Typography variant="h6" paragraph>
               Start your journey to financial freedom today!
             </Typography>
-            {/* <Button variant="contained" color="secondary" size="large" sx={{ mr: 2 }} onClick={() => {
+             {/* <Button variant="contained" color="secondary" size="large" sx={{ mr: 2 }} onClick={() => {
     toggleNotepad();
     openNotepad();
   }}>
               Make Notes
-            </Button> */}
+            </Button>  */}
           </Grid>
           <Grid item xs={12} md={6}>
             <Box sx={{ position: 'relative' }}>
@@ -297,72 +307,96 @@ const fetchChatbotFollowUp = (id) => {
       </Dialog>
 
       {/* ChatBot */}
-      <ChatBotContainer>
-        {isChatBotOpen ? (
-          <ChatBotBox>
-            <ChatBotHeader>
-              <Typography variant="subtitle1" fontWeight="bold">ChatBot</Typography>
-              <Button onClick={toggleChatBot} sx={{ color: 'white', minWidth: 'auto' }}>X</Button>
-            </ChatBotHeader>
-         <ChatBotBody>
-{chatHistory.map((msg, index) => (
-  msg.type === "bot" ? (
-    <BotMessage key={index}>{msg.text}</BotMessage>
-  ) : msg.type === "user" ? (
-    <UserMessage key={index}>{msg.text}</UserMessage>
-  ) : msg.type === "answer" ? (
-    <Box key={index} sx={{ backgroundColor: '#e0f7fa', padding: '8px', borderRadius: '8px', maxWidth: '80%' }}>
-      {msg.text}
-    </Box>
-  ) : msg.type === "exitMessage" ? (
-    <Box key={index} sx={{ backgroundColor: '#bbdefb', padding: '8px', borderRadius: '8px', maxWidth: '80%' }}>
-      {msg.text}
-    </Box>
-  ) : msg.type === "menu" ? (
-    <Button 
-      key={index} 
-      variant="contained"
-      sx={{ mt: 1, backgroundColor: msg.text === "Exit" ? "#FF2C2C" : "#C466FF", color: "white" }}
-      onClick={() => fetchChatbotFollowUp(msg.id)}
+<ChatBotContainer>
+  {!isChatBotOpen && showChatbotMessage && (
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 110,
+        right: 50,
+        backgroundColor: '#0078d4',
+        color: 'white',
+        padding: '12px 22px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+        fontSize: '24px',
+        transition: 'opacity 0.5s',
+        animation: 'float 3s ease-in-out infinite',
+                '@keyframes float': {
+                  '0%, 100%': { transform: 'translateY(0)' },
+                  '50%': { transform: 'translateY(-10px)' },
+      }}}
     >
-      {msg.text}
-    </Button>
-  ) : msg.type === "link" ? (  // ✅ Rendering clickable links
-    <Box key={index} sx={{ mt: 1 }}>
-      <a href={msg.url} target="_blank" rel="noopener noreferrer" 
-         style={{ textDecoration: 'none', color: '#0078d4', fontWeight: 'bold' }}>
-        {msg.text}
-      </a>
+      I am here to assist you!
     </Box>
-  ) : (
-    <Button 
-      key={index} 
-      variant="outlined"  
-      sx={{ mt: 1, color: '#d81b60', borderColor: '#d81b60' }}
-      onClick={() => fetchChatbotFollowUp(msg.id)}
-    >
-      {msg.text}
-    </Button>
-  )
-))}
+  )}
 
-</ChatBotBody>
-            <Box sx={{ display: 'flex', p: 1 }}>
-              <ChatBotInput
-                variant="outlined"
-                placeholder="Type your message..."
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-              />
-              <Button variant="contained" color="primary" onClick={()=>sendChat()}>Send</Button>
+  {isChatBotOpen ? (
+    <ChatBotBox>
+      <ChatBotHeader>
+        <Typography variant="subtitle1" fontWeight="bold">ChatBot</Typography>
+        <Button onClick={toggleChatBot} sx={{ color: 'white', minWidth: 'auto' }}>X</Button>
+      </ChatBotHeader>
+      <ChatBotBody ref={chatBodyRef}>
+        {chatHistory.map((msg, index) => (
+          msg.type === "bot" ? (
+            <BotMessage key={index}>{msg.text}</BotMessage>
+          ) : msg.type === "user" ? (
+            <UserMessage key={index}>{msg.text}</UserMessage>
+          ) : msg.type === "answer" ? (
+            <Box key={index} sx={{ backgroundColor: '#e0f7fa', padding: '8px', borderRadius: '8px', maxWidth: '80%' }}>
+              {msg.text}
             </Box>
-          </ChatBotBox>
-        ) : (
-         <IconButton onClick={toggleChatBot} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
-           <img src={ChatbotIcon} alt="ChatBot" style={{ width: 80, height: 80 }} />
-          </IconButton>        
-          )}
-      </ChatBotContainer>
+          ) : msg.type === "exitMessage" ? (
+            <Box key={index} sx={{ backgroundColor: '#bbdefb', padding: '8px', borderRadius: '8px', maxWidth: '80%' }}>
+              {msg.text}
+            </Box>
+          ) : msg.type === "menu" ? (
+            <Button 
+              key={index} 
+              variant="contained"
+              sx={{ mt: 1, backgroundColor: msg.text === "Exit" ? "#FF2C2C" : "#C466FF", color: "white" }}
+              onClick={() => fetchChatbotFollowUp(msg.id)}
+            >
+              {msg.text}
+            </Button>
+          ) : msg.type === "link" ? (
+            <Box key={index} sx={{ mt: 1 }}>
+              <a href={msg.url} target="_blank" rel="noopener noreferrer" 
+                 style={{ textDecoration: 'none', color: '#0078d4', fontWeight: 'bold' }}>
+                {msg.text}
+              </a>
+            </Box>
+          ) : (
+            <Button 
+              key={index} 
+              variant="outlined"  
+              sx={{ mt: 1, color: '#d81b60', borderColor: '#d81b60' }}
+              onClick={() => fetchChatbotFollowUp(msg.id)}
+            >
+              {msg.text}
+            </Button>
+          )
+        ))}
+      </ChatBotBody>
+
+      <Box sx={{ display: 'flex', p: 1 }}>
+        <ChatBotInput
+          variant="outlined"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+        />
+        <Button variant="contained" color="primary" onClick={() => sendChat()}>Send</Button>
+      </Box>
+    </ChatBotBox>
+  ) : (
+    <IconButton onClick={toggleChatBot} sx={{ position: 'fixed', bottom: 20, right: 20, }}>
+      <img src={ChatbotIcon} alt="ChatBot" style={{ width: 100, height: 100 }} />
+    </IconButton>
+  )}
+</ChatBotContainer>
+
     </HeroContainer>
   );
 }
