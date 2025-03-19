@@ -43,8 +43,9 @@ function WhyJoinUsSection() {
                     <Box component="span" color="secondary.main">Insights</Box>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Access tailored investment solutions designed to meet your unique needs. Access tailored investment solutions designed to meet your unique needs.
-                  </Typography>
+✅ Expert Management – Our funds are managed by experienced professionals who analyze market trends to maximize returns. <br /> <br />
+
+✅ Diversified Portfolio – Reduce risk and achieve balanced growth with a well-diversified investment strategy.                  </Typography>
                   <Button variant="contained" color="secondary" href="#joinform">
                     Join Us
                   </Button>
@@ -59,8 +60,9 @@ function WhyJoinUsSection() {
                     <Box component="span" color="secondary.main">Insights</Box>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Access tailored investment solutions designed to meet your unique needs. Access tailored investment solutions designed to meet your unique needs.
-                  </Typography>
+✅ Flexible Investment Options – Start small and invest at your own pace with SIPs and lump sum plans. <br />  <br />
+
+✅ Transparency & Security – Stay informed with real-time portfolio tracking and secure transactions.                  </Typography>
                 </CardContent>
                 <CardMedia
                   component="img"

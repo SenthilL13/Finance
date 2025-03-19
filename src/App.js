@@ -33,9 +33,9 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/home" element={<LoginSignup />} /> {/* Login Screen Route */}
-          <Route path="/login" element={<Home />} />
-          <Route path="/" element={<Admin />} /> {/* Home page after login */}
+          <Route path="/" element={<LoginSignup />} /> {/* Login Screen Route */}
+          <Route path="/home" element={<Home />} />
+          <Route path="/admin" element={<Admin />} /> {/* Home page after login */}
         </Routes>
       </Router>
     </ThemeProvider>

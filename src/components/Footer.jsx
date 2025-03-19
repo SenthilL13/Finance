@@ -2,6 +2,10 @@ import React from 'react';
 import { Container, Grid, Typography, Link, Box, IconButton } from '@mui/material';
 import { Instagram, Facebook, LinkedIn, YouTube, WhatsApp } from '@mui/icons-material';
 
+const openApp = (url) => {
+  window.open(url, "_blank");
+};
+
 function Footer() {
   return (
     <Box component="footer" sx={{ bgcolor: 'grey.900', color: 'white', py: 6 }}>
@@ -34,30 +38,24 @@ function Footer() {
               Follow Us On
             </Typography>
             <Box sx={{ display: 'flex', gap: 2 }}>
-              <IconButton color="inherit" aria-label="Instagram">
+              <IconButton color="inherit" aria-label="Instagram" onClick={() => openApp("https://www.instagram.com/yourprofile")}>
                 <Instagram />
               </IconButton>
-              <IconButton color="inherit" aria-label="Facebook">
+      <IconButton color="inherit" aria-label="Facebook" onClick={() => openApp("https://www.facebook.com/yourprofile")}>
                 <Facebook />
               </IconButton>
-              <IconButton color="inherit" aria-label="LinkedIn">
+      <IconButton color="inherit" aria-label="LinkedIn" onClick={() => openApp("https://www.linkedin.com/in/yourprofile")}>
                 <LinkedIn />
               </IconButton>
-              <IconButton color="inherit" aria-label="YouTube">
+      <IconButton color="inherit" aria-label="YouTube" onClick={() => openApp("https://www.youtube.com/channel/yourchannel")}>
                 <YouTube />
-              </IconButton>
-              <IconButton color="inherit" aria-label="WhatsApp">
-                <WhatsApp />
               </IconButton>
             </Box>
           </Grid>
         </Grid>
         <Box sx={{ borderTop: 1, borderColor: 'grey.800', mt: 4, pt: 4 }}>
           <Grid container>
-            <Grid item xs={12} sm={6}>
-              <Link href="#" color="inherit" sx={{ mr: 2 }}>Privacy Policy</Link>
-              <Link href="#" color="inherit">Terms and Conditions</Link>
-            </Grid>
+          
             <Grid item xs={12} sm={6} sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
               <Typography variant="body2">&copy; 2023</Typography>
             </Grid>
